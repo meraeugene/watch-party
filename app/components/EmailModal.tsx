@@ -27,13 +27,13 @@ export const EmailModal = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center text-black bg-black/10 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center text-black bg-black/10 backdrop-blur-sm "
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white p-6 font-[family-name:var(--font-geist-mono)] w-[80%] max-w-md shadow-xl"
+            className="bg-white p-6 font-[family-name:var(--font-geist-mono)] w-[80%] max-w-md shadow-xl rounded-md"
           >
             <h2 className="text-xl font-semibold mb-4 flex items-center justify-center gap-2 ">
               <HiOutlineMail />
@@ -51,7 +51,7 @@ export const EmailModal = ({
               <button
                 onClick={onClose}
                 disabled={loading}
-                className=" border border-solid cursor-pointer  border-black/[.04] transition-colors flex items-center justify-center text-black bg-[#f2f2f2] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]  font-[family-name:var(--font-geist-mono)]"
+                className="rounded-sm border border-solid cursor-pointer  border-black/[.04] transition-colors flex items-center justify-center text-black bg-[#f2f2f2] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]  font-[family-name:var(--font-geist-mono)]"
               >
                 Cancel
               </button>
@@ -63,7 +63,7 @@ export const EmailModal = ({
                   onSend(email, setLoading);
                 }}
                 disabled={loading}
-                className=" border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center text-white bg-[#1a1a1a] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px] font-[family-name:var(--font-geist-mono)]"
+                className=" rounded-sm border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center text-white bg-[#1a1a1a] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px] font-[family-name:var(--font-geist-mono)]"
               >
                 {loading ? (
                   <div className="flex items-center gap-2">
