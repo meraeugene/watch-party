@@ -19,7 +19,7 @@ const Step1GuessHostName = ({
       <h1 className="text-center  uppercase bg-[#0a0a0a] text-white dark:bg-white w-full py-1 dark:text-black font-[family-name:var(--font-geist-mono)] text-2xl font-bold ">
         Watch Party
       </h1>
-      <h2 className="text-center font-[family-name:var(--font-geist-mono)] text-2xl font-bold bg-gray-200 text-black py-1 mb-8 ">
+      <h2 className="text-center font-[family-name:var(--font-geist-mono)] text-xl font-bold bg-gray-200 text-black py-1 mb-8 ">
         01: Host / Guest
       </h2>
 

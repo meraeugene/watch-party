@@ -65,7 +65,7 @@ const Step4Ticket = ({
         <h1 className="text-center  uppercase bg-white w-full py-1 text-black font-[family-name:var(--font-geist-mono)] text-2xl font-bold">
           Watch Party
         </h1>
-        <h2 className="text-center font-[family-name:var(--font-geist-mono)] text-2xl font-bold bg-gray-100 text-black py-1 w-full ">
+        <h2 className="text-center font-[family-name:var(--font-geist-mono)] text-xl font-bold bg-gray-100 text-black py-1 w-full ">
           04: All Set!
         </h2>
       </div>
@@ -98,7 +98,7 @@ const Step4Ticket = ({
             </p>
           </div>
 
-          <p className="movie-title text-xl my-2 font-extrabold text-black font-[family-name:var(--font-geist-mono)] text-center">
+          <p className="movie-title text-2xl my-2 font-extrabold text-black font-[family-name:var(--font-geist-mono)] text-center">
             {selectedMovie?.title}
           </p>
         </div>

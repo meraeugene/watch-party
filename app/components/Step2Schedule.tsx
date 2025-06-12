@@ -23,11 +23,11 @@ const Step2Schedule = ({
         <IoCaretBack fontSize={18} />
       </button>
 
-      <div className=" mb-4">
+      <div className=" mb-6">
         <h1 className="text-center  uppercase dark:bg-white bg-[#0a0a0a] w-full py-1 text-white dark:text-black font-[family-name:var(--font-geist-mono)] text-2xl font-bold">
           Watch Party
         </h1>
-        <h2 className="text-center font-[family-name:var(--font-geist-mono)] text-2xl font-bold bg-gray-200 text-black py-1">
+        <h2 className="text-center font-[family-name:var(--font-geist-mono)] text-xl font-bold bg-gray-200 text-black py-1">
           02: Create Schedule
         </h2>
       </div>

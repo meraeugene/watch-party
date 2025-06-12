@@ -97,7 +97,7 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
         <h1 className="text-center  uppercase bg-[#0a0a0a] dark:bg-white w-full py-1 text-white dark:text-black font-[family-name:var(--font-geist-mono)] text-2xl font-bold">
           Watch Party
         </h1>
-        <h2 className="text-center font-[family-name:var(--font-geist-mono)] text-2xl font-bold bg-gray-200 text-black py-1 ">
+        <h2 className="text-center font-[family-name:var(--font-geist-mono)] text-xl font-bold bg-gray-200 text-black py-1 ">
           03: Find Movie
         </h2>
       </div>
@@ -183,11 +183,11 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
         <div className="grid grid-cols-2 gap-x-8 gap-y-12 w-full animate-pulse">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="space-y-4">
-              <div className="bg-gray-300 dark:bg-gray-200 h-[210px] lg:h-[400px] w-full" />
-              <div className="h-4 bg-gray-300 dark:bg-gray-200 w-full " />
-              <div className="h-3 bg-gray-200 dark:bg-gray-200 w-1/2 " />
-              <div className="h-3 bg-gray-200 dark:bg-gray-200 w-1/3 " />
-              <div className="h-7 bg-gray-400 dark:bg-gray-200  w-full" />
+              <div className="bg-gray-300 dark:bg-gray-200 h-[210px] lg:h-[400px] w-full rounded-sm" />
+              <div className="h-4 bg-gray-300 dark:bg-gray-200 w-full rounded-sm " />
+              <div className="h-3 bg-gray-200 dark:bg-gray-200 w-1/2  rounded-sm" />
+              <div className="h-3 bg-gray-200 dark:bg-gray-200 w-1/3  rounded-sm" />
+              <div className="h-7 bg-gray-400 dark:bg-gray-200  w-full rounded-sm" />
             </div>
           ))}
         </div>
