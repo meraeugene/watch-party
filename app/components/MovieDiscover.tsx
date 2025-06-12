@@ -53,7 +53,7 @@ export default function MovieDiscover({
         <select
           onChange={(e) => sortByYear(e.target.value)}
           value={sortDirection}
-          className="border outline-none border-solid border-black/[.08] dark:border-white/[.145] transition-colors bg-white dark:bg-gray-300 hover:bg-gray-100 dark:hover:bg-[#1a1a1a] text-black font-medium text-sm sm:text-base h-9 px-4 font-[family-name:var(--font-geist-mono)]"
+          className="ctn-button"
         >
           <option value="" disabled>
             Sort by Year
@@ -63,7 +63,7 @@ export default function MovieDiscover({
         </select>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-8 gap-y-12 w-full">
+      <div className="grid grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-12 lg:gap-y-16 lg:gap-x-12 w-full">
         {items.map((movie, i) => (
           <figure key={i}>
             <Image
@@ -106,7 +106,7 @@ export default function MovieDiscover({
                   setStep(4);
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className="mt-4 border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-[#0a0a0a] dark:bg-[#f2f2f2] text-white dark:text-black dark:hover:bg-[#1a1a1a] font-medium text-sm text-nowrap sm:text-base h-8 sm:h-12 px-2 mx-auto sm:w-auto md:w-[158px] font-[family-name:var(--font-geist-mono)]"
+                className="mt-4 ctn-button"
               >
                 Watch Together!
               </button>
@@ -119,7 +119,7 @@ export default function MovieDiscover({
 
   if (loading) {
     return (
-      <div className="grid grid-cols-2 gap-x-8 gap-y-12 w-full animate-pulse">
+      <div className="grid grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-12 w-full animate-pulse">
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="space-y-4">
             <div className="bg-gray-300 dark:bg-gray-200 h-[210px]  w-full" />

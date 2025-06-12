@@ -4,6 +4,8 @@ import { useState } from "react";
 import { BsSearchHeartFill } from "react-icons/bs";
 import { IoCaretBack } from "react-icons/io5";
 import MovieDiscover from "./MovieDiscover";
+import debounce from "lodash/debounce";
+import { useEffect } from "react";
 
 interface Step3FindMovieProps {
   query: string;
@@ -16,15 +18,33 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
   const [query, setQuery] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
   const [results, setResults] = useState<MovieResult[]>([]);
+  const [suggestions, setSuggestions] = useState<MovieResult[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suppressSuggestions, setSuppressSuggestions] = useState(false);
   const [sortDirection, setSortDirection] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const searchMovies = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const searchMovies = async (e?: React.FormEvent | string) => {
     setLoading(true);
+    let searchTerm = "";
+
+    if (typeof e === "string") {
+      searchTerm = e;
+    } else {
+      e?.preventDefault();
+      searchTerm = query;
+    }
+
+    if (!searchTerm.trim()) {
+      setResults([]);
+      setHasSearched(false);
+      return;
+    }
 
     try {
-      const res = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+      const res = await fetch(
+        `/api/search?query=${encodeURIComponent(searchTerm)}`
+      );
       const data = await res.json();
       setResults(data.results || []);
     } catch (err) {
@@ -35,6 +55,37 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
       setHasSearched(true);
     }
   };
+
+  const fetchSuggestions = debounce(async (value: string) => {
+    if (!value.trim()) return setSuggestions([]);
+
+    try {
+      const res = await fetch(`/api/search?query=${encodeURIComponent(value)}`);
+      const data = await res.json();
+      setSuggestions(data.results.slice(0, 5));
+      setShowSuggestions(true);
+    } catch (err) {
+      console.error("Suggestion fetch failed:", err);
+    }
+  }, 300);
+
+  useEffect(() => {
+    if (suppressSuggestions) {
+      setSuppressSuggestions(false);
+      return;
+    }
+
+    if (query.length > 1) {
+      fetchSuggestions(query);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+
+    return () => {
+      fetchSuggestions.cancel();
+    };
+  }, [query, fetchSuggestions, suppressSuggestions]);
 
   const sortByYear = (direction: string) => {
     const sorted = [...results].sort((a, b) => {
@@ -48,11 +99,8 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
   };
 
   return (
-    <div>
-      <button
-        onClick={() => setStep(2)}
-        className="mt-6 border border-solid cursor-pointer border-black/[.08] transition-colors flex items-center justify-center bg-white text-black dark:bg-gray-200 dark:hover:bg-[#1a1a1a] font-medium text-sm sm:text-base h-8 sm:h-12 px-4 sm:px-5  sm:w-auto md:w-[158px] font-[family-name:var(--font-geist-mono)] mb-8"
-      >
+    <div className="lg:max-w-xl mx-auto">
+      <button onClick={() => setStep(2)} className=" back-button">
         <IoCaretBack fontSize={18} />
       </button>
 
@@ -60,35 +108,64 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
         <h1 className="text-center  uppercase bg-[#0a0a0a] dark:bg-white w-full py-1 text-white dark:text-black font-[family-name:var(--font-geist-mono)] text-2xl font-bold">
           Watch Party
         </h1>
-        <h1 className="text-center font-[family-name:var(--font-geist-mono)] text-2xl font-bold bg-gray-200 text-black py-1 ">
+        <h2 className="text-center font-[family-name:var(--font-geist-mono)] text-2xl font-bold bg-gray-200 text-black py-1 ">
           03: Find Movie
-        </h1>
-        <h1 className="text-center font-[family-name:var(--font-geist-mono)] text-2xl font-medium ">
-          {" "}
-        </h1>
+        </h2>
       </div>
 
-      <form onSubmit={searchMovies} className="flex gap-2 mb-8 w-full">
-        <input
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            if (e.target.value === "") {
-              setResults([]);
-              setHasSearched(false);
-            }
+      <div className="relative">
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            fetchSuggestions.cancel();
+            setShowSuggestions(false);
+            await searchMovies(query);
           }}
-          placeholder="What to watch?"
-          type="search"
-          className="flex-1 outline-none border border-black/[.08] dark:border-white/[.145] border-solid px-3 text-sm  font-[family-name:var(--font-geist-mono)] "
-        />
-        <button
-          type="submit"
-          className=" border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 font-[family-name:var(--font-geist-mono)]"
+          className="flex mb-8 w-full "
         >
-          <BsSearchHeartFill />
-        </button>
-      </form>
+          <input
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setSuppressSuggestions(false);
+              if (e.target.value === "") {
+                setResults([]);
+                setHasSearched(false);
+              }
+            }}
+            placeholder="What to watch?"
+            type="search"
+            className="flex-1 outline-none border border-black/[.08] dark:border-white/[.145] border-solid px-3 text-sm md:text-lg  font-[family-name:var(--font-geist-mono)] "
+          />
+          <button
+            type="submit"
+            className=" border border-l-0 rounded-tl-none rounded-bl-none rounded-sm border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 font-[family-name:var(--font-geist-mono)] rounded-br-none"
+          >
+            <BsSearchHeartFill />
+          </button>
+
+          {showSuggestions && suggestions.length > 0 && (
+            <ul className="absolute top-[35px] bg-black/80 text-white shadow-md border border-white/10 mt-1 w-full z-10 max-h-60 overflow-y-auto backdrop-blur-xl rounded-md rounded-tl-none rounded-tr-none font-[family-name:var(--font-geist-mono)]">
+              {suggestions.map((movie, i) => (
+                <li
+                  key={i}
+                  className="px-4 py-2 hover:bg-white/10 cursor-pointer text-sm transition-colors duration-150"
+                  onClick={async () => {
+                    setSuppressSuggestions(true);
+                    fetchSuggestions.cancel();
+                    setShowSuggestions(false);
+                    setSuggestions([]);
+                    setQuery(movie.title);
+                    await searchMovies(movie.title);
+                  }}
+                >
+                  {movie.title} {movie.year && `(${movie.year})`}
+                </li>
+              ))}
+            </ul>
+          )}
+        </form>
+      </div>
 
       {!hasSearched && results.length === 0 && (
         <MovieDiscover onSelect={setSelectedMovie} setStep={setStep} />
@@ -113,7 +190,7 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
               <select
                 onChange={(e) => sortByYear(e.target.value)}
                 value={sortDirection}
-                className="border outline-none border-solid border-black/[.08] dark:border-white/[.145] transition-colors bg-white dark:bg-gray-300 hover:bg-gray-100 dark:hover:bg-[#1a1a1a] text-black font-medium text-sm sm:text-base h-9 px-4 font-[family-name:var(--font-geist-mono)]"
+                className="ctn-button "
               >
                 <option value="" disabled>
                   Sort by Year
@@ -124,7 +201,7 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-x-8 gap-y-12 w-full">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-12 lg:gap-y-16 lg:gap-x-12  w-full">
             {results.map((movie, i) => (
               <figure key={i}>
                 <Image
@@ -150,13 +227,13 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
                       {movie.type && <span>{movie.type}</span>}
                     </p>
 
-                    {(movie.season || movie.episodes) && (
+                    {movie.season && (
                       <p className="text-sm text-gray-500 mt-1">
                         {movie.season && <span>Season {movie.season} </span>}
                       </p>
                     )}
 
-                    {(movie.season || movie.episodes) && (
+                    {movie.episodes && (
                       <p className="text-sm text-gray-500 mt-1">
                         {movie.episodes && (
                           <span>{movie.episodes} Episodes</span>
@@ -170,7 +247,7 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
                       setStep(4);
                       window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
-                    className="mt-4 border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-[#0a0a0a] dark:bg-[#f2f2f2] text-white dark:text-black dark:hover:bg-[#1a1a1a] font-medium text-sm text-nowrap sm:text-base h-8 sm:h-12 px-2 mx-auto sm:w-auto md:w-[158px] font-[family-name:var(--font-geist-mono)]"
+                    className="mt-4 ctn-button"
                   >
                     Watch Together!
                   </button>

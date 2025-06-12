@@ -68,9 +68,9 @@ export default function GetStarted() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen overflow-y-scroll p-6 pb-12 ">
+    <div className="w-full min-h-screen flex items-center justify-center mx-auto  p-6 pb-12 ">
       <Toaster position="top-center" richColors />
-      <main className="flex flex-col w-full max-w-2xl items-center   ">
+      <main className="flex flex-col w-full max-w-2xl  mx-auto items-center   ">
         <AnimatePresence mode="wait">
           <motion.div
             key={`step-${step}`}

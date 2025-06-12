@@ -18,11 +18,8 @@ const Step2Schedule = ({
   setStep,
 }: Step2ScheduleProps) => {
   return (
-    <div>
-      <button
-        onClick={() => setStep(1)}
-        className="mt-6 border border-solid cursor-pointer border-black/[.08] transition-colors flex items-center justify-center bg-white text-black dark:bg-gray-200 dark:hover:bg-[#1a1a1a] font-medium text-sm sm:text-base h-8 sm:h-12 px-4 sm:px-5  sm:w-auto md:w-[158px] font-[family-name:var(--font-geist-mono)] mb-8"
-      >
+    <div className="lg:max-w-xl mx-auto">
+      <button onClick={() => setStep(1)} className="back-button">
         <IoCaretBack fontSize={18} />
       </button>
 
@@ -30,9 +27,9 @@ const Step2Schedule = ({
         <h1 className="text-center  uppercase dark:bg-white bg-[#0a0a0a] w-full py-1 text-white dark:text-black font-[family-name:var(--font-geist-mono)] text-2xl font-bold">
           Watch Party
         </h1>
-        <h1 className="text-center font-[family-name:var(--font-geist-mono)] text-2xl font-bold bg-gray-200 text-black py-1">
+        <h2 className="text-center font-[family-name:var(--font-geist-mono)] text-2xl font-bold bg-gray-200 text-black py-1">
           02: Create Schedule
-        </h1>
+        </h2>
       </div>
 
       <div className="flex flex-col gap-4">
@@ -72,7 +69,7 @@ const Step2Schedule = ({
           }
           setStep(3);
         }}
-        className="mt-6 border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center text-white dark:bg-[#f2f2f2] bg-[#0a0a0a] dark:text-black dark:hover:bg-[#1a1a1a] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px] font-[family-name:var(--font-geist-mono)]"
+        className="mt-8 ctn-button"
       >
         Next: Find Movie
       </button>

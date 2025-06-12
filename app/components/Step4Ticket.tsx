@@ -23,6 +23,10 @@ interface Step4TicketProps {
   setStep: (step: number) => void;
 }
 
+const numbers = [
+  9, 1, 7, 3, 7, 5, 4, 4, 4, 5, 4, 1, 4, 7, 8, 7, 3, 4, 1, 4, 5, 2,
+];
+
 const Step4Ticket = ({
   selectedMovie,
   date,
@@ -52,11 +56,8 @@ const Step4Ticket = ({
     return null;
 
   return (
-    <div>
-      <button
-        onClick={() => setStep(3)}
-        className="mt-6 border border-solid cursor-pointer border-black/[.08] transition-colors flex items-center justify-center bg-white text-black dark:bg-gray-300 dark:hover:bg-[#1a1a1a] font-medium text-sm sm:text-base h-8 sm:h-12 px-4 sm:px-5  sm:w-auto md:w-[158px] font-[family-name:var(--font-geist-mono)] mb-8"
-      >
+    <div className="lg:max-w-sm mx-auto">
+      <button onClick={() => setStep(3)} className=" back-button">
         <IoCaretBack fontSize={18} />
       </button>
 
@@ -64,9 +65,9 @@ const Step4Ticket = ({
         <h1 className="text-center  uppercase bg-white w-full py-1 text-black font-[family-name:var(--font-geist-mono)] text-2xl font-bold">
           Watch Party
         </h1>
-        <h1 className="text-center font-[family-name:var(--font-geist-mono)] text-2xl font-bold bg-gray-100 text-black py-1 w-full ">
+        <h2 className="text-center font-[family-name:var(--font-geist-mono)] text-2xl font-bold bg-gray-100 text-black py-1 w-full ">
           04: All Set!
-        </h1>
+        </h2>
       </div>
 
       <div ref={ticketRef} className="ticket bg-gray-100 dark:bg-white">
@@ -105,7 +106,7 @@ const Step4Ticket = ({
           <Image
             width={200}
             height={400}
-            className="object-center object-cover w-auto  h-auto mx-auto "
+            className="object-center object-cover rounded-lg shadow-md   h-auto mx-auto "
             src={`/api/image-proxy?url=${encodeURIComponent(
               selectedMovie.poster
             )}`}
@@ -116,71 +117,71 @@ const Step4Ticket = ({
           <div className="font-[family-name:var(--font-geist-mono)]">
             <div className="flex  justify-between gap-16">
               <div className="flex flex-col items-start">
-                <h1 className="text-lg font-medium">
+                <h2 className="text-lg font-medium">
                   <div className="flex items-center gap-2 text-gray-600">
                     <CiCalendarDate />
                     Date
                   </div>
-                </h1>
-                <h1 className="text-xl font-semibold">{date}</h1>
+                </h2>
+                <h2 className="text-xl font-semibold">{date}</h2>
               </div>
 
               <div className="flex flex-col items-end">
-                <h1 className="text-lg font-medium">
+                <h2 className="text-lg font-medium">
                   <div className="flex items-center gap-2 text-gray-600">
                     <CiTimer />
                     Time
                   </div>
-                </h1>
-                <h1 className="text-xl font-semibold">{time}</h1>
+                </h2>
+                <h2 className="text-xl font-semibold">{time}</h2>
               </div>
             </div>
 
             <div className=" mt-6 flex items-center justify-between">
               <div className="flex flex-col items-start">
-                <h1 className="text-lg font-medium">
+                <h2 className="text-lg font-medium">
                   <div className="flex justify-center items-center gap-2 text-gray-600">
                     <RiUserHeartLine />
                     Guess
                   </div>
-                </h1>
-                <h1 className="text-xl font-semibold">{guess}</h1>
+                </h2>
+                <h2 className="text-xl font-semibold">{guess}</h2>
               </div>
 
               <div className="flex flex-col items-end">
-                <h1 className="text-lg font-medium">
-                  <div className="flex justify-center items-start gap-2 text-gray-600">
+                <h2 className="text-lg font-medium">
+                  <div className="flex justify-center items-center gap-2 text-gray-600">
                     <TbUserShield />
                     Host
                   </div>
-                </h1>
-                <h1 className="text-xl font-semibold">{host}</h1>
+                </h2>
+                <h2 className="text-xl font-semibold">{host}</h2>
               </div>
             </div>
 
             <div className=" mt-6 flex items-center justify-between">
               <div className="flex flex-col items-start">
-                <h1 className="text-lg font-medium">
+                <h2 className="text-lg font-medium">
                   <div className="flex justify-center items-center gap-2 text-gray-600">
                     <GiDuration />
                     Duration
                   </div>
-                </h1>
-                <h1 className="text-xl font-semibold">
+                </h2>
+                <h2 className="text-xl font-semibold">
                   {selectedMovie.duration
                     ? `${selectedMovie.duration} min`
                     : "N/A"}{" "}
-                </h1>
+                </h2>
               </div>
 
               <div className="flex flex-col items-end">
-                <h1 className="text-lg font-medium">
+                <h2 className="text-lg font-medium">
                   <div className="flex justify-center items-center gap-2 text-gray-600">
                     <RxDiscordLogo />
                     App
                   </div>
-                </h1>
-                <h1 className="text-xl font-semibold">Discord</h1>
+                </h2>
+                <h2 className="text-xl font-semibold">Discord</h2>
               </div>
             </div>
           </div>
@@ -191,28 +192,9 @@ const Step4Ticket = ({
           <table className="numbers">
             <tbody>
               <tr>
-                <td>9</td>
-                <td>1</td>
-                <td>7</td>
-                <td>3</td>
-                <td>7</td>
-                <td>5</td>
-                <td>4</td>
-                <td>4</td>
-                <td>4</td>
-                <td>5</td>
-                <td>4</td>
-                <td>1</td>
-                <td>4</td>
-                <td>7</td>
-                <td>8</td>
-                <td>7</td>
-                <td>3</td>
-                <td>4</td>
-                <td>1</td>
-                <td>4</td>
-                <td>5</td>
-                <td>2</td>
+                {numbers.map((num, index) => (
+                  <td key={index}>{num}</td>
+                ))}
               </tr>
             </tbody>
           </table>
@@ -277,7 +259,7 @@ const Step4Ticket = ({
 
       <button
         onClick={() => setShowModal(true)}
-        className="mt-2 border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-white text-black hover:bg-gray-100 font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px] gap-3 font-[family-name:var(--font-geist-mono)]"
+        className="mt-4 ctn-button flex items-center gap-3"
       >
         <HiOutlineMail />
         Email Ticket
@@ -287,7 +269,7 @@ const Step4Ticket = ({
         href={selectedMovie.link}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-4 border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-white text-black hover:bg-gray-100 font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px] gap-3 font-[family-name:var(--font-geist-mono)]"
+        className="mt-4 ctn-button flex items-center gap-3"
       >
         <RiMovieAiLine />
         Watch Here
