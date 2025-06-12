@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     siteName: "Watch Party",
     images: [
       {
-        url: "https://yourdomain.com/og-image.jpg", // your preview image
+        url: "https://raw.githubusercontent.com/meraeugene/watch-party/refs/heads/main/public/thumbnail.png", // your preview image
         width: 1200,
         height: 630,
         alt: "Watch Party Preview Image",
@@ -36,7 +36,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Watch Party",
     description: "Create a watch party with your friends!",
-    images: ["https://yourdomain.com/og-image.jpg"],
+    images: [
+      "https://raw.githubusercontent.com/meraeugene/watch-party/refs/heads/main/public/thumbnail.png",
+    ],
   },
 };
 
