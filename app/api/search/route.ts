@@ -33,6 +33,7 @@ export async function GET(req: Request) {
       const title = $(el).find(".film-name a").text().trim();
       const href = $(el).find(".film-name a").attr("href");
       const link = `https://myflixerto.tube${href}`;
+
       const poster =
         $(el).find(".film-poster img").attr("data-src") ||
         $(el).find(".film-poster img").attr("src") ||

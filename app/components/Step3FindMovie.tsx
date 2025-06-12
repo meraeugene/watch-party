@@ -16,13 +16,23 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
   const [hasSearched, setHasSearched] = useState(false);
   const [results, setResults] = useState<MovieResult[]>([]);
   const [sortDesc, setSortDesc] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const searchMovies = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
-    const data = await res.json();
-    setHasSearched(true);
-    setResults(data.results || []);
+    setLoading(true);
+
+    try {
+      const res = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+      const data = await res.json();
+      setResults(data.results || []);
+    } catch (err) {
+      console.error("Search failed:", err);
+      setResults([]);
+    } finally {
+      setLoading(false);
+      setHasSearched(true);
+    }
   };
 
   const sortByYear = () => {
@@ -67,7 +77,7 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
               setHasSearched(false);
             }
           }}
-          placeholder="What do you want to watch?"
+          placeholder="What to watch?"
           type="search"
           className="flex-1 outline-none border border-black/[.08] dark:border-white/[.145] border-solid px-3 text-sm  font-[family-name:var(--font-geist-mono)] "
         />
@@ -79,7 +89,19 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
         </button>
       </form>
 
-      {results.length > 0 ? (
+      {loading ? (
+        <div className="grid grid-cols-2 gap-x-8 gap-y-12 w-full animate-pulse">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="space-y-4">
+              <div className="bg-gray-300 dark:bg-gray-700 h-[210px]  w-full" />
+              <div className="h-4 bg-gray-300 dark:bg-gray-700 w-full " />
+              <div className="h-3 bg-gray-200 dark:bg-gray-600 w-1/2 " />
+              <div className="h-3 bg-gray-200 dark:bg-gray-600 w-1/3 " />
+              <div className="h-7 bg-gray-400 dark:bg-gray-600  w-full" />
+            </div>
+          ))}
+        </div>
+      ) : results.length > 0 ? (
         <>
           {results.length > 0 && (
             <div className="flex justify-end mb-8 ">
@@ -92,35 +114,42 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
             </div>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 w-full">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-12 w-full">
             {results.map((movie, i) => (
-              <div
-                key={i}
-                className=" shadow hover:shadow-md transition-shadow duration-300 "
-              >
+              <figure key={i} className="">
                 <Image
-                  width={315}
-                  height={470}
+                  width={250}
+                  height={400}
                   src={movie.poster}
                   alt={movie.title}
-                  className="w-full  object-cover"
+                  className="w-full h-auto mx-auto  object-cover"
                 />
-                <div className="font-[family-name:var(--font-geist-mono)] mt-4">
+
+                <div className="font-[family-name:var(--font-geist-mono)] mt-4  ">
                   <div className="flex flex-col">
-                    <h2 className="text-md font-semibold mb-1 ">
+                    <figcaption className="text-md   font-semibold mb-1 ">
                       {movie.title}
-                    </h2>
+                    </figcaption>
 
                     <p className="text-sm text-gray-600">
                       {movie.year && <span>{movie.year} • </span>}
-                      {movie.duration && <span>{movie.duration}m • </span>}
+                      {movie.duration && <span>{movie.duration}m </span>}
+                    </p>
+
+                    <p className="text-sm text-gray-600">
                       {movie.type && <span>{movie.type}</span>}
                     </p>
+
                     {(movie.season || movie.episodes) && (
                       <p className="text-sm text-gray-500 mt-1">
                         {movie.season && <span>Season {movie.season} </span>}
+                      </p>
+                    )}
+
+                    {(movie.season || movie.episodes) && (
+                      <p className="text-sm text-gray-500 mt-1">
                         {movie.episodes && (
-                          <span>• {movie.episodes} Episodes</span>
+                          <span>{movie.episodes} Episodes</span>
                         )}
                       </p>
                     )}
@@ -131,12 +160,12 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
                       setStep(4);
                       window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
-                    className="mt-4 border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-[#0a0a0a] dark:bg-[#f2f2f2] text-white dark:text-black dark:hover:bg-[#1a1a1a] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px] font-[family-name:var(--font-geist-mono)]"
+                    className="mt-4 border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-[#0a0a0a] dark:bg-[#f2f2f2] text-white dark:text-black dark:hover:bg-[#1a1a1a] font-medium text-sm text-nowrap sm:text-base h-8 sm:h-12 px-2 mx-auto sm:w-auto md:w-[158px] font-[family-name:var(--font-geist-mono)]"
                   >
-                    I like this!
+                    Watch Together!
                   </button>
                 </div>
-              </div>
+              </figure>
             ))}
           </div>
         </>

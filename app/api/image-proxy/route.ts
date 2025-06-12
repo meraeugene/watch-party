@@ -2,6 +2,8 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const imageUrl = searchParams.get("url");
 
+  console.log(imageUrl);
+
   if (!imageUrl) {
     return new Response(JSON.stringify({ error: "Missing URL" }), {
       status: 400,

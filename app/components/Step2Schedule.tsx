@@ -40,9 +40,8 @@ const Step2Schedule = ({
           Date:
           <input
             type="date"
-            className="w-full border border-solid border-black/[.08] dark:border-white/[.145] px-3 py-2 mt-2 bg-white dark:bg-gray-50 dark:text-black"
+            className="w-full border border-solid border-black/[.08] dark:border-white/[.145] px-3 py-2 mt-2 "
             value={date}
-            style={{ colorScheme: "light" }}
             onChange={(e) => setDate(e.target.value)}
           />
         </label>

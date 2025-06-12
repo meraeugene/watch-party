@@ -23,7 +23,17 @@ const Step1GuessHostName = ({
         01: Host / Guest
       </h1>
 
-      <div className="flex flex-col gap-4">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!guess.trim() || !host.trim()) {
+            toast.error("Please type both host and guest names.");
+            return;
+          }
+          setStep(2);
+        }}
+        className="flex flex-col gap-4"
+      >
         <label className="font-[family-name:var(--font-geist-mono)]">
           Host Name:
           <input
@@ -45,20 +55,14 @@ const Step1GuessHostName = ({
             placeholder="Enter guest name"
           />
         </label>
-      </div>
 
-      <button
-        onClick={() => {
-          if (!guess.trim() || !host.trim()) {
-            toast.error("Please type both host and guest names.");
-            return;
-          }
-          setStep(2);
-        }}
-        className="mt-8 border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-[#0a0a0a] dark:bg-[#f2f2f2] text-white dark:text-black dark:hover:bg-[#1a1a1a] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px] font-[family-name:var(--font-geist-mono)]"
-      >
-        Next: Create Schedule
-      </button>
+        <button
+          type="submit"
+          className="mt-4 border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-[#0a0a0a] dark:bg-[#f2f2f2] text-white dark:text-black dark:hover:bg-[#1a1a1a] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px] font-[family-name:var(--font-geist-mono)]"
+        >
+          Next: Create Schedule
+        </button>
+      </form>
     </div>
   );
 };

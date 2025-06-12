@@ -78,25 +78,37 @@ export async function POST(req: NextRequest) {
     to: email,
     subject: `${hostName} invited you to watch "${movieTitle}"!`,
     html: `
-      <div style="font-family: Arial, sans-serif; text-align: center;">
-        <img src="${imageUrl}" alt="Ticket" style="max-width: 100%; border-radius: 8px; margin-bottom: 20px;" />
-        <a href="${calendarUrl}" target="_blank"
-          style="
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #4285F4;
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            border-radius: 4px;
-            font-weight: 500;
-            font-family: 'Roboto', Arial, sans-serif;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-          ">
-          Add to Google Calendar
-        </a>
-      </div>
-    `,
+  <div style="font-family: Arial, sans-serif; text-align: center;">
+    <img 
+      src="${imageUrl}" 
+      alt="Ticket" 
+      style="
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      " 
+    />
+    <a href="${calendarUrl}" target="_blank"
+      style="
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #4285F4;
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+        border-radius: 4px;
+        font-weight: 500;
+        font-family: 'Roboto', Arial, sans-serif;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      ">
+      Remind Me!
+    </a>
+  </div>
+`,
   });
 
   return NextResponse.json({ success: true });

@@ -2,15 +2,15 @@ import Image from "next/image";
 import { CiCalendarDate, CiTimer } from "react-icons/ci";
 import { RxDiscordLogo } from "react-icons/rx";
 import Barcode from "./BarCode";
-import { RefObject, useState, useEffect } from "react";
+import { RefObject, useState, useEffect, useRef } from "react";
 import { MovieResult } from "@/types";
 import * as htmlToImage from "html-to-image";
 import { EmailModal } from "./EmailModal";
-import { HiOutlineMail } from "react-icons/hi";
+import { HiOutlineMail, HiOutlinePencilAlt } from "react-icons/hi";
 import { toast } from "sonner";
 import { IoCaretBack } from "react-icons/io5";
 import { GiDuration } from "react-icons/gi";
-import { RiUserHeartLine } from "react-icons/ri";
+import { RiMovieAiLine, RiUserHeartLine } from "react-icons/ri";
 import { TbUserShield } from "react-icons/tb";
 
 interface Step4TicketProps {
@@ -33,6 +33,10 @@ const Step4Ticket = ({
   setStep,
 }: Step4TicketProps) => {
   const [showModal, setShowModal] = useState(false);
+  const [customTitle, setCustomTitle] = useState(
+    `You're Invited to a Watch Party!`
+  );
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (showModal) {
@@ -68,18 +72,40 @@ const Step4Ticket = ({
       <div ref={ticketRef} className="ticket bg-gray-100 dark:bg-white">
         <div className="holes-top"></div>
         <div className="title">
-          <p className="cinema text-xl font-[family-name:var(--font-geist-mono)] text-black">
-            YOU&apos;RE INVITED TO WATCH
-          </p>
-          <p className="movie-title text-2xl my-2 font-extrabold text-black font-[family-name:var(--font-geist-mono)] text-center">
+          <div className="relative text-center w-full">
+            <textarea
+              value={customTitle}
+              ref={textareaRef}
+              onChange={(e) => setCustomTitle(e.target.value)}
+              rows={2}
+              className="cinema text-2xl font-[family-name:var(--font-geist-mono)] text-black bg-transparent w-full outline-none resize-none leading-snug focus:border-b-2 border-dashed border-black cursor-text transition text-center"
+              placeholder="You're Invited to a Watch Party!"
+            />
+            <p
+              onClick={() => {
+                const textarea = textareaRef.current;
+                if (textarea) {
+                  textarea.focus();
+                  const len = textarea.value.length;
+                  textarea.setSelectionRange(len, len); // <-- move caret to end
+                }
+              }}
+              className="hide-on-export text-sm text-gray-500 italic mt-1 flex items-center gap-2 justify-center"
+            >
+              Yes, you can edit the title
+              <HiOutlinePencilAlt />
+            </p>
+          </div>
+
+          <p className="movie-title text-xl my-2 font-extrabold text-black font-[family-name:var(--font-geist-mono)] text-center">
             {selectedMovie?.title}
           </p>
         </div>
         <div className="poster">
           <Image
-            width={315}
-            height={470}
-            className="object-center object-cover "
+            width={200}
+            height={400}
+            className="object-center object-cover w-auto  h-auto mx-auto "
             src={`/api/image-proxy?url=${encodeURIComponent(
               selectedMovie.poster
             )}`}
@@ -121,9 +147,9 @@ const Step4Ticket = ({
                 <h1 className="text-xl font-semibold">{guess}</h1>
               </div>
 
-              <div className="flex flex-col items-start">
+              <div className="flex flex-col items-end">
                 <h1 className="text-lg font-medium">
-                  <div className="flex justify-center items-center gap-2 text-gray-600">
+                  <div className="flex justify-center items-start gap-2 text-gray-600">
                     <TbUserShield />
                     Host
                   </div>
@@ -206,8 +232,12 @@ const Step4Ticket = ({
           const topHoles = ticketRef.current.querySelector(
             ".holes-top"
           ) as HTMLElement;
+          const hint = ticketRef.current.querySelector(
+            ".hide-on-export"
+          ) as HTMLElement;
 
           if (topHoles) topHoles.style.display = "none";
+          if (hint) hint.style.display = "none";
 
           try {
             const dataUrl = await htmlToImage.toPng(ticketRef.current);
@@ -239,6 +269,7 @@ const Step4Ticket = ({
             toast.error("Error sending email.");
           } finally {
             if (topHoles) topHoles.style.display = "";
+            if (hint) hint.style.display = "";
             setLoading(false);
           }
         }}
@@ -246,11 +277,21 @@ const Step4Ticket = ({
 
       <button
         onClick={() => setShowModal(true)}
-        className="mt-2 border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-white text-black hover:bg-gray-100 font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px] gap-2 font-[family-name:var(--font-geist-mono)]"
+        className="mt-2 border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-white text-black hover:bg-gray-100 font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px] gap-3 font-[family-name:var(--font-geist-mono)]"
       >
         <HiOutlineMail />
         Email Ticket
       </button>
+
+      <a
+        href={selectedMovie.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-4 border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center bg-white text-black hover:bg-gray-100 font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px] gap-3 font-[family-name:var(--font-geist-mono)]"
+      >
+        <RiMovieAiLine />
+        Watch Here
+      </a>
     </div>
   );
 };

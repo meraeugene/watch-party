@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { HiOutlineMail } from "react-icons/hi";
 import { toast } from "sonner";
+import Loader from "./Loader";
 
 interface EmailModalProps {
   isOpen: boolean;
@@ -64,7 +65,13 @@ export const EmailModal = ({
                 disabled={loading}
                 className=" border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center text-white bg-[#1a1a1a] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px] font-[family-name:var(--font-geist-mono)]"
               >
-                {loading ? "Sending..." : "Send"}
+                {loading ? (
+                  <div className="flex items-center gap-2">
+                    <Loader /> Sending
+                  </div>
+                ) : (
+                  "Send"
+                )}
               </button>
             </div>
           </motion.div>

@@ -7,4 +7,5 @@ export interface MovieResult {
   season?: string;
   episodes?: string;
   type?: "Movie" | "TV" | "Unknown";
+  watchUrl?: string;
 }

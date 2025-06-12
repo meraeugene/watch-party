@@ -36,3 +36,15 @@ export function convertTo24Hour(timeStr: string) {
 export function formatDateLuxon(date: DateTime): string {
   return date.toUTC().toFormat("yyyyLLdd'T'HHmmss'Z'");
 }
+
+export function formatDateToMonthDayYear(dateString: string): string {
+  const date = new Date(dateString);
+
+  if (isNaN(date.getTime())) return "Invalid date";
+
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
