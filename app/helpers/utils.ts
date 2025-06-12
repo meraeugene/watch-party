@@ -32,7 +32,6 @@ export function convertTo24Hour(timeStr: string) {
   )}`;
 }
 
-// Google Calendar datetime format: YYYYMMDDTHHmmssZ
 export function formatDateLuxon(date: DateTime): string {
   return date.toUTC().toFormat("yyyyLLdd'T'HHmmss'Z'");
 }

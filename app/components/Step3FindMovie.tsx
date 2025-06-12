@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { BsSearchHeartFill } from "react-icons/bs";
 import { IoCaretBack } from "react-icons/io5";
+import MovieDiscover from "./MovieDiscover";
 
 interface Step3FindMovieProps {
   query: string;
@@ -15,7 +16,7 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
   const [query, setQuery] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
   const [results, setResults] = useState<MovieResult[]>([]);
-  const [sortDesc, setSortDesc] = useState(true);
+  const [sortDirection, setSortDirection] = useState("");
   const [loading, setLoading] = useState(false);
 
   const searchMovies = async (e: React.FormEvent) => {
@@ -35,15 +36,15 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
     }
   };
 
-  const sortByYear = () => {
+  const sortByYear = (direction: string) => {
     const sorted = [...results].sort((a, b) => {
       const yearA = parseInt(a.year || "0");
       const yearB = parseInt(b.year || "0");
-      return sortDesc ? yearB - yearA : yearA - yearB;
+      return direction === "desc" ? yearB - yearA : yearA - yearB;
     });
 
     setResults(sorted);
-    setSortDesc(!sortDesc);
+    setSortDirection(direction);
   };
 
   return (
@@ -89,34 +90,43 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
         </button>
       </form>
 
+      {!hasSearched && results.length === 0 && (
+        <MovieDiscover onSelect={setSelectedMovie} setStep={setStep} />
+      )}
+
       {loading ? (
         <div className="grid grid-cols-2 gap-x-8 gap-y-12 w-full animate-pulse">
-          {Array.from({ length: 4 }).map((_, i) => (
+          {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="space-y-4">
-              <div className="bg-gray-300 dark:bg-gray-700 h-[210px]  w-full" />
-              <div className="h-4 bg-gray-300 dark:bg-gray-700 w-full " />
-              <div className="h-3 bg-gray-200 dark:bg-gray-600 w-1/2 " />
-              <div className="h-3 bg-gray-200 dark:bg-gray-600 w-1/3 " />
-              <div className="h-7 bg-gray-400 dark:bg-gray-600  w-full" />
+              <div className="bg-gray-300 dark:bg-gray-200 h-[210px]  w-full" />
+              <div className="h-4 bg-gray-300 dark:bg-gray-200 w-full " />
+              <div className="h-3 bg-gray-200 dark:bg-gray-200 w-1/2 " />
+              <div className="h-3 bg-gray-200 dark:bg-gray-200 w-1/3 " />
+              <div className="h-7 bg-gray-400 dark:bg-gray-200  w-full" />
             </div>
           ))}
         </div>
       ) : results.length > 0 ? (
         <>
           {results.length > 0 && (
-            <div className="flex justify-end mb-8 ">
-              <button
-                onClick={sortByYear}
-                className="border border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors bg-white dark:bg-gray-300 hover:bg-gray-100 dark:hover:bg-[#1a1a1a] text-black font-medium text-sm sm:text-base h-9 px-4 font-[family-name:var(--font-geist-mono)]"
+            <div className="flex justify-end mb-8">
+              <select
+                onChange={(e) => sortByYear(e.target.value)}
+                value={sortDirection}
+                className="border outline-none border-solid border-black/[.08] dark:border-white/[.145] transition-colors bg-white dark:bg-gray-300 hover:bg-gray-100 dark:hover:bg-[#1a1a1a] text-black font-medium text-sm sm:text-base h-9 px-4 font-[family-name:var(--font-geist-mono)]"
               >
-                Sort by Year {sortDesc ? "↓" : "↑"}
-              </button>
+                <option value="" disabled>
+                  Sort by Year
+                </option>
+                <option value="desc">Latest</option>
+                <option value="asc">Oldest</option>
+              </select>
             </div>
           )}
 
           <div className="grid grid-cols-2 gap-x-8 gap-y-12 w-full">
             {results.map((movie, i) => (
-              <figure key={i} className="">
+              <figure key={i}>
                 <Image
                   width={250}
                   height={400}

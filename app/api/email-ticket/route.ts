@@ -107,6 +107,11 @@ export async function POST(req: NextRequest) {
       ">
       Remind Me!
     </a>
+
+    <p style="margin: 20px 0; font-size: 16px; color: #333;">
+  🎬 Want to host your own watch party and send invites like this? <a href="https://watch-party-invitation.vercel.app/" target="_blank" style="color: #4285F4; text-decoration: none; font-weight: bold;">Visit Watch Party now</a> and plan a movie together anytime you like!
+</p>
+
   </div>
 `,
   });
