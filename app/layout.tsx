@@ -16,6 +16,28 @@ export const metadata: Metadata = {
   title: "Watch Party",
   description:
     "Create a watch party with your friends by creating schedule and movie selection.",
+  openGraph: {
+    title: "Watch Party",
+    description: "Create a watch party with your friends!",
+    url: "https://watch-party-invitation.vercel.app/",
+    siteName: "Watch Party",
+    images: [
+      {
+        url: "https://yourdomain.com/og-image.jpg", // your preview image
+        width: 1200,
+        height: 630,
+        alt: "Watch Party Preview Image",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Watch Party",
+    description: "Create a watch party with your friends!",
+    images: ["https://yourdomain.com/og-image.jpg"],
+  },
 };
 
 export default function RootLayout({
