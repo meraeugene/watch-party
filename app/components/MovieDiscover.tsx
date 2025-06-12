@@ -71,7 +71,7 @@ export default function MovieDiscover({
               alt={movie.title}
               width={250}
               height={400}
-              className="w-full h-auto mx-auto  object-cover"
+              className="w-full rounded-sm h-auto mx-auto  object-cover"
             />
             <div className="font-[family-name:var(--font-geist-mono)] mt-4  ">
               <div className="flex flex-col">
@@ -122,7 +122,7 @@ export default function MovieDiscover({
       <div className="grid grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-12 w-full animate-pulse">
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="space-y-4">
-            <div className="bg-gray-300 dark:bg-gray-200 h-[210px]  w-full" />
+            <div className="bg-gray-300 dark:bg-gray-200 h-[210px] lg:h-[400px]  w-full" />
             <div className="h-4 bg-gray-300 dark:bg-gray-200  w-full " />
             <div className="h-3 bg-gray-200 dark:bg-gray-200  w-1/2 " />
             <div className="h-3 bg-gray-200 dark:bg-gray-200  w-1/3 " />

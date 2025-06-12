@@ -1,11 +1,10 @@
 import { MovieResult } from "@/types";
 import Image from "next/image";
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { BsSearchHeartFill } from "react-icons/bs";
 import { IoCaretBack } from "react-icons/io5";
 import MovieDiscover from "./MovieDiscover";
 import debounce from "lodash/debounce";
-import { useEffect } from "react";
 
 interface Step3FindMovieProps {
   query: string;
@@ -17,15 +16,15 @@ interface Step3FindMovieProps {
 const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
   const [query, setQuery] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
+  const [lastSearch, setLastSearch] = useState("");
   const [results, setResults] = useState<MovieResult[]>([]);
   const [suggestions, setSuggestions] = useState<MovieResult[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [suppressSuggestions, setSuppressSuggestions] = useState(false);
+  const suppressSuggestionsRef = useRef(false);
   const [sortDirection, setSortDirection] = useState("");
   const [loading, setLoading] = useState(false);
 
   const searchMovies = async (e?: React.FormEvent | string) => {
-    setLoading(true);
     let searchTerm = "";
 
     if (typeof e === "string") {
@@ -35,18 +34,20 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
       searchTerm = query;
     }
 
-    if (!searchTerm.trim()) {
-      setResults([]);
-      setHasSearched(false);
+    // Avoid redundant search
+    if (searchTerm === lastSearch) {
+      setLoading(false);
       return;
     }
 
     try {
+      setLoading(true);
       const res = await fetch(
         `/api/search?query=${encodeURIComponent(searchTerm)}`
       );
       const data = await res.json();
       setResults(data.results || []);
+      setLastSearch(searchTerm);
     } catch (err) {
       console.error("Search failed:", err);
       setResults([]);
@@ -56,36 +57,24 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
     }
   };
 
-  const fetchSuggestions = debounce(async (value: string) => {
-    if (!value.trim()) return setSuggestions([]);
+  const debouncedFetchSuggestions = useMemo(
+    () =>
+      debounce(async (value: string) => {
+        if (!value.trim()) return setSuggestions([]);
 
-    try {
-      const res = await fetch(`/api/search?query=${encodeURIComponent(value)}`);
-      const data = await res.json();
-      setSuggestions(data.results.slice(0, 5));
-      setShowSuggestions(true);
-    } catch (err) {
-      console.error("Suggestion fetch failed:", err);
-    }
-  }, 300);
-
-  useEffect(() => {
-    if (suppressSuggestions) {
-      setSuppressSuggestions(false);
-      return;
-    }
-
-    if (query.length > 1) {
-      fetchSuggestions(query);
-    } else {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
-
-    return () => {
-      fetchSuggestions.cancel();
-    };
-  }, [query, fetchSuggestions, suppressSuggestions]);
+        try {
+          const res = await fetch(
+            `/api/search?query=${encodeURIComponent(value)}`
+          );
+          const data = await res.json();
+          setSuggestions(data.results.slice(0, 5));
+          setShowSuggestions(true);
+        } catch (err) {
+          console.error("Suggestion fetch failed:", err);
+        }
+      }, 300),
+    []
+  );
 
   const sortByYear = (direction: string) => {
     const sorted = [...results].sort((a, b) => {
@@ -117,7 +106,9 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
         <form
           onSubmit={async (e) => {
             e.preventDefault();
-            fetchSuggestions.cancel();
+            if (!query.trim()) return;
+            suppressSuggestionsRef.current = true;
+            debouncedFetchSuggestions.cancel();
             setShowSuggestions(false);
             await searchMovies(query);
           }}
@@ -126,17 +117,34 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
           <input
             value={query}
             onChange={(e) => {
-              setQuery(e.target.value);
-              setSuppressSuggestions(false);
-              if (e.target.value === "") {
-                setResults([]);
+              const val = e.target.value;
+              setQuery(val);
+
+              if (!val.trim()) {
+                suppressSuggestionsRef.current = true;
+                debouncedFetchSuggestions.cancel();
                 setHasSearched(false);
+                setSuggestions([]);
+                setShowSuggestions(false);
+                return;
+              }
+
+              if (suppressSuggestionsRef.current) {
+                suppressSuggestionsRef.current = false;
+                return;
+              }
+
+              if (val.length > 1) {
+                debouncedFetchSuggestions(val);
+              } else {
+                setSuggestions([]);
+                setShowSuggestions(false);
               }
             }}
             placeholder="What to watch?"
-            type="search"
-            className="flex-1 outline-none border border-black/[.08] dark:border-white/[.145] border-solid px-3 text-sm md:text-lg  font-[family-name:var(--font-geist-mono)] "
+            className="flex-1 outline-none border border-black/[.08] dark:border-white/[.145] border-solid  text-sm md:text-lg px-3  font-[family-name:var(--font-geist-mono)] "
           />
+
           <button
             type="submit"
             className=" border border-l-0 rounded-tl-none rounded-bl-none rounded-sm border-solid cursor-pointer border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 font-[family-name:var(--font-geist-mono)] rounded-br-none"
@@ -151,8 +159,8 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
                   key={i}
                   className="px-4 py-2 hover:bg-white/10 cursor-pointer text-sm transition-colors duration-150"
                   onClick={async () => {
-                    setSuppressSuggestions(true);
-                    fetchSuggestions.cancel();
+                    suppressSuggestionsRef.current = true;
+                    debouncedFetchSuggestions.cancel();
                     setShowSuggestions(false);
                     setSuggestions([]);
                     setQuery(movie.title);
@@ -175,7 +183,7 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
         <div className="grid grid-cols-2 gap-x-8 gap-y-12 w-full animate-pulse">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="space-y-4">
-              <div className="bg-gray-300 dark:bg-gray-200 h-[210px]  w-full" />
+              <div className="bg-gray-300 dark:bg-gray-200 h-[210px] lg:h-[400px] w-full" />
               <div className="h-4 bg-gray-300 dark:bg-gray-200 w-full " />
               <div className="h-3 bg-gray-200 dark:bg-gray-200 w-1/2 " />
               <div className="h-3 bg-gray-200 dark:bg-gray-200 w-1/3 " />
@@ -209,7 +217,7 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
                   height={400}
                   src={movie.poster}
                   alt={movie.title}
-                  className="w-full h-auto mx-auto  object-cover"
+                  className="w-full h-auto mx-auto rounded-sm  object-cover"
                 />
 
                 <div className="font-[family-name:var(--font-geist-mono)] mt-4  ">

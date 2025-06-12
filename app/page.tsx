@@ -69,7 +69,7 @@ export default function Home() {
               Invite friends, set the vibe, choose the movie — your watch party
               made simple and stylish.
             </p>
-            <div className="flex flex-wrap justify-center md:justify-start gap-4">
+            <div className="flex flex-wrap justify-center md:justify-start gap-6">
               <Link
                 href="/get-started"
                 className="dark:bg-white text-black font-semibold px-6 py-3 rounded-sm shadow-md hover:bg-gray-100 bg-gray-100 transition"
