@@ -104,6 +104,7 @@ const Step4Ticket = ({
         </div>
         <div className="poster">
           <Image
+            crossOrigin="anonymous"
             width={200}
             height={400}
             className="object-center object-cover rounded-lg shadow-md   h-auto mx-auto "

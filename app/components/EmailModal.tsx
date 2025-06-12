@@ -39,9 +39,19 @@ export const EmailModal = ({
               <HiOutlineMail />
               Email Invite
             </h2>
+            <form action=""></form>
             <input
               type="email"
               value={email}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !loading) {
+                  e.preventDefault();
+                  if (!email.includes("@"))
+                    return toast.error("Enter a valid email.");
+                  setLoading(true);
+                  onSend(email, setLoading);
+                }
+              }}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2   border border-solid  border-black/[1]  mb-4 outline-none"
               placeholder={`Enter ${guess}'s email`}
