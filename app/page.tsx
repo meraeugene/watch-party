@@ -52,7 +52,7 @@ export default function Home() {
     {
       icon: <FaTicketAlt />,
       title: "Step 4: Get Your Ticket",
-      desc: "Receive a beautiful watch party ticket with a summary and watch link, straight to your email.",
+      desc: "Receive a beautiful watch party ticket with a summary and watch link, straight to your guess email.",
     },
   ];
 
@@ -108,7 +108,7 @@ export default function Home() {
         className="py-16 px-6 md:px-16  dark:bg-black  dark:text-white backdrop-blur-md border-t dark:border-gray-700 border-gray-300"
       >
         <FadeInWhenVisible>
-          <div className="max-w-4xl mx-auto text-center mb-20">
+          <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 dark:text-white text-black">
               How It Works
             </h2>
@@ -141,7 +141,7 @@ export default function Home() {
         <FadeInWhenVisible>
           <h2 className="text-3xl font-bold mb-6">Ready to Watch Together?</h2>
           <p className=" mb-10 text-base  dark:text-gray-300 text-gray-700">
-            Create your personalized movie night ticket in under a minute.
+            Create your personalized watch party ticket in under a minute.
           </p>
           <Link
             href="/get-started"
