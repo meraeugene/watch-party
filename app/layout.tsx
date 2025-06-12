@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   title: "Watch Party",
   description:
     "Create a watch party with your friends by creating schedule and movie selection.",
+  icons: {
+    icon: "/favicon.png",
+  },
   openGraph: {
     title: "Watch Party",
     description: "Create a watch party with your friends!",
