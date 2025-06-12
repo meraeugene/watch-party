@@ -59,10 +59,10 @@ export default function Home() {
   return (
     <main className="font-[family-name:var(--font-geist-mono)]  text-white">
       {/* Hero Section */}
-      <section className="min-h-screen bg-gradient-to-tr lg:bg-gradient-to-b dark:from-black dark:via-zinc-900 dark:to-black flex flex-col-reverse md:flex-row-reverse items-center justify-end md:justify-center gap-12 px-6 md:px-20 pb-10 pt-20 text-center md:text-left lg:mx-auto lg:gap-20 lg:px-40">
+      <section className="min-h-screen bg-gradient-to-tr lg:bg-gradient-to-b dark:from-black dark:via-zinc-900 dark:to-black flex flex-col-reverse xl:flex-row-reverse items-center justify-end md:justify-end gap-12 md:gap-16 px-6 md:px-20 pb-10 pt-20 text-center md:text-left lg:mx-auto lg:gap-20 lg:px-40">
         <FadeInWhenVisible>
           <div className="w-full lg:w-[80%]  ">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight dark:text-white drop-shadow text-black">
+            <h1 className="text-3xl sm:text-4xl md:text-4xl font-bold mb-6 leading-tight dark:text-white drop-shadow text-black">
               Host the Ultimate Movie Night
             </h1>
             <p className="text-base sm:text-lg md:text-xl mb-10 dark:text-gray-300 text-gray-700">
@@ -122,7 +122,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto">
           {steps.map((step, i) => (
             <FadeInWhenVisible key={i} delay={i * 0.2}>
-              <div className="p-6 md:p-8 dark:bg-black/30 backdrop-blur-lg rounded-lg border border-gray-700 shadow-xl hover:shadow-2xl transition-all">
+              <div className="p-6 md:p-8 h-full dark:bg-black/30 backdrop-blur-lg rounded-lg border border-gray-700 shadow-xl hover:shadow-2xl transition-all">
                 <div className="text-4xl dark:text-white text-black mb-4">
                   {step.icon}
                 </div>
@@ -139,8 +139,8 @@ export default function Home() {
       {/* Call to Action */}
       <section className="py-24 px-6 md:px-16 text-center dark:bg-black text-black dark:text-white border-t dark:border-gray-700 border-gray-300 ">
         <FadeInWhenVisible>
-          <h2 className="text-4xl font-bold mb-6">Ready to Watch Together?</h2>
-          <p className="text-lg mb-8 dark:text-gray-300 text-gray-700">
+          <h2 className="text-3xl font-bold mb-6">Ready to Watch Together?</h2>
+          <p className=" mb-10 text-base  dark:text-gray-300 text-gray-700">
             Create your personalized movie night ticket in under a minute.
           </p>
           <Link

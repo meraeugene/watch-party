@@ -13,11 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Watch Party",
+  title: "Watch Party | Create a Watch Party with Friends",
   description:
     "Create a watch party with your friends by creating schedule and movie selection.",
   icons: {
-    icon: "/favicon.png",
+    icon: "/icon.ico",
   },
   openGraph: {
     title: "Watch Party",

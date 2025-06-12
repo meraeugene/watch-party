@@ -183,7 +183,7 @@ const Step3FindMovie = ({ setSelectedMovie, setStep }: Step3FindMovieProps) => {
         <div className="grid grid-cols-2 gap-x-8 gap-y-12 w-full animate-pulse">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="space-y-4">
-              <div className="bg-gray-300 dark:bg-gray-200 h-[210px] lg:h-[400px] w-full rounded-sm" />
+              <div className="bg-gray-300 dark:bg-gray-200 h-[210px] md:h-[400px] w-full rounded-sm" />
               <div className="h-4 bg-gray-300 dark:bg-gray-200 w-full rounded-sm " />
               <div className="h-3 bg-gray-200 dark:bg-gray-200 w-1/2  rounded-sm" />
               <div className="h-3 bg-gray-200 dark:bg-gray-200 w-1/3  rounded-sm" />
