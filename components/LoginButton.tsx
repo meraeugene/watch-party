@@ -9,7 +9,8 @@ const LoginButton = () => {
     await supabase.auth.signInWithOAuth({
       provider: "discord",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `https://watch-party-invitation.vercel.app/auth/callback`,
+        // redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
   };
