@@ -9,3 +9,12 @@ export interface MovieResult {
   type?: "Movie" | "TV" | "Unknown";
   watchUrl?: string;
 }
+
+export interface CurrentUser {
+  id: string;
+  username: string;
+  tag: string;
+  email: string | undefined;
+  avatar: string;
+  discordId: string | null;
+}

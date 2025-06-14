@@ -1,7 +1,9 @@
-import { convertTo24Hour, formatDateLuxon } from "@/app/helpers/utils";
+import { convertTo24Hour, formatDateLuxon } from "@/helpers/utils";
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { DateTime } from "luxon";
+import { createClient } from "@/utils/supabase/server";
+import { createDiscordInvite } from "@/lib/discord/create-invite";
 
 export async function POST(req: NextRequest) {
   const {
@@ -11,6 +13,9 @@ export async function POST(req: NextRequest) {
     hostName,
     date,
     time,
+    movieUrl,
+    guestName,
+    hostDiscordId,
     movieDuration = "60",
   } = await req.json();
 
@@ -21,6 +26,9 @@ export async function POST(req: NextRequest) {
     !hostName ||
     !date ||
     !time ||
+    !movieUrl ||
+    !guestName ||
+    !hostDiscordId ||
     !movieDuration
   ) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -65,6 +73,23 @@ export async function POST(req: NextRequest) {
 
   const imageUrl = cloudinaryData.secure_url;
 
+  // SAVE TO SUPABASE
+  const inviteCode = await createDiscordInvite(process.env.DISCORD_CHANNEL_ID!);
+
+  const supabase = await createClient();
+  await supabase.from("watch_party_tickets").insert({
+    movie_title: movieTitle,
+    movie_duration: movieDuration,
+    guest_name: guestName,
+    host_name: hostName,
+    date,
+    time,
+    ticket_url: imageUrl,
+    host_discord_id: hostDiscordId,
+    movie_url: movieUrl,
+    invite_code: inviteCode,
+  });
+
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -108,8 +133,15 @@ export async function POST(req: NextRequest) {
       Remind Me!
     </a>
 
-    <p style="margin: 20px 0; font-size: 16px; color: #333;">
-  🎬 Want to host your own watch party and send invites like this? <a href="https://watch-party-invitation.vercel.app/" target="_blank" style="color: #4285F4; text-decoration: none; font-weight: bold;">Visit Watch Party now</a> and plan a movie together anytime you like!
+
+<p style="margin: 20px 0; font-size: 16px; color: #333;">
+   🎟️ Join the Discord room for this watch party: 
+ <a href="https://discord.gg/${inviteCode}">Join the Watch Party</a>
+</p>
+
+
+<p style="margin: 20px 0; font-size: 16px; color: #333;">
+🎬 Want to host your own watch party and send invites like this? <a href="https://watch-party-invitation.vercel.app/" target="_blank" style="color: #4285F4; text-decoration: none; font-weight: bold;">Visit Watch Party now</a> and plan a movie together anytime you like!
 </p>
 
   </div>
