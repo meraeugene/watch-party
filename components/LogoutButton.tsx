@@ -16,7 +16,7 @@ const LogoutButton = () => {
   return (
     <button
       onClick={handleLogout}
-      className="text-sm flex items-center gap-2"
+      className="text-sm flex items-center gap-2 cursor-pointer"
       disabled={isPending}
     >
       {isPending ? (

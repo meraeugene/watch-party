@@ -23,7 +23,6 @@ export const getCurrentUser = async () => {
   return {
     id: user.id,
     discordId,
-    email: user.email,
     username,
     tag,
     avatar,

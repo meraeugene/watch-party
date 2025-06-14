@@ -139,7 +139,8 @@ export default async function guildMemberAdd(
         `🎉 Your guest **${usedTicket.guest_name}** has joined your private movie night!\n\n` +
           `**Movie:** ${usedTicket.movie_title}\n` +
           `**Date:** ${usedTicket.date}\n**Time:** ${usedTicket.time}\n` +
-          `**Runtime:** ${usedTicket.movie_duration} minutes**\n\n` +
+          `**Runtime:** ${usedTicket.movie_duration} minutes\n\n` +
+          `**Movie Link:** ${usedTicket.movie_url}\n\n` +
           `Get ready to start the movie on time. You can chat with your guest in the private text channel and join the voice room when it starts. Enjoy! 🍿`
       )
       .catch(() => {

@@ -10,7 +10,6 @@ interface Props {
     avatar: string;
     username: string;
     tag: string;
-    email: string | undefined;
   };
 }
 
@@ -33,7 +32,7 @@ export const Menu = ({ user }: Props) => {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="rounded-full overflow-hidden border border-white/20"
+        className="rounded-full cursor-pointer overflow-hidden border border-white/20"
       >
         <Image
           src={user.avatar}
