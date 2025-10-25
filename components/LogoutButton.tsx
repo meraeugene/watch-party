@@ -27,7 +27,6 @@ const LogoutButton = () => {
       ) : (
         <>
           <RiLogoutCircleLine />
-          Logout
         </>
       )}
     </button>

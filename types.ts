@@ -14,7 +14,6 @@ export interface CurrentUser {
   id: string;
   username: string;
   tag: string;
-  email: string | undefined;
   avatar: string;
   discordId: string | null;
 }

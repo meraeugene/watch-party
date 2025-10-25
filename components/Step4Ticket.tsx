@@ -281,6 +281,16 @@ const Step4Ticket = ({
         <RiMovieAiLine />
         Watch Here
       </a>
+
+      <a
+        href="https://discord.gg/ZV5SwzeJM3"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-4 ctn-button flex items-center gap-3"
+      >
+        <RxDiscordLogo />
+        Join Discord Server (Host)
+      </a>
     </div>
   );
 };

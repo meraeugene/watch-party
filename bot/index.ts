@@ -16,8 +16,17 @@ const client = new Client({
   ],
 });
 
-client.once("ready", () => {
+const invites = new Map();
+
+client.once("ready", async () => {
   console.log(`🤖 Bot is ready as ${client.user?.tag}`);
+
+  // Cache invites for your guild
+  const guild = await client.guilds.fetch(process.env.DISCORD_GUILD_ID!);
+  if (!guild) return;
+
+  const guildInvites = await guild.invites.fetch();
+  invites.set(guild.id, guildInvites);
 });
 
 client.on("guildMemberAdd", (member) => guildMemberAdd(member, client));

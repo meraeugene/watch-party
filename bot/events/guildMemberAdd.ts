@@ -14,14 +14,43 @@ export default async function guildMemberAdd(
 ) {
   if (member.guild.id !== process.env.DISCORD_GUILD_ID) return;
 
+  const invites = new Map();
+
+  const cachedInvites = invites.get(member.guild.id);
+  const newInvites = await member.guild.invites.fetch();
+
+  invites.set(member.guild.id, newInvites);
+
+  const usedInvite = newInvites.find((inv) => {
+    const prev = cachedInvites?.get(inv.code);
+    return prev && inv.uses! > prev.uses!;
+  });
+
+  if (!usedInvite) {
+    console.warn("⚠️ Could not determine which invite was used.");
+    return;
+  }
+
+  const inviteCode = usedInvite.code;
+
+  // Match to the correct ticket
   const { data: tickets, error } = await supabase
     .from("watch_party_tickets")
     .select("*")
-    .eq("status", "pending");
+    .eq("invite_code", inviteCode)
+    .eq("status", "pending")
+    .limit(1);
 
-  if (error || !tickets?.length) return console.log("No pending tickets");
+  if (error) {
+    console.error("❌ Supabase error fetching ticket:", error.message);
+  }
 
-  const usedTicket = tickets[0];
+  const usedTicket = tickets?.[0];
+
+  if (!usedTicket) {
+    console.log(`👤 No ticket found for invite code: ${inviteCode}`);
+    return;
+  }
 
   if (!usedTicket) {
     console.log(`👤 No pending ticket found for ${member.user.id}`);
